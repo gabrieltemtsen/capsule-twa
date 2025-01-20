@@ -60,9 +60,8 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ setScreen }) => {
         setLoadingMessage("Initialization complete. Redirecting to the app...");
         await new Promise((resolve) => setTimeout(resolve, 1000));
         setScreen("home");
-        const serializedSession = capsuleClient.exportSession();
         const res = await axios.post(`${SERVER_URL}/api/store-session`, {
-          serializedSession
+          session : 'EXAMPLE SESSION'
         });
         console.log(res.data);
         alert('Session stored successfully');
