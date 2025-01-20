@@ -133,14 +133,14 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ setScreen }) => {
       });
 
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      const  serializedSession = capsuleClient.exportSession();
+      // const  serializedSession = capsuleClient.exportSession();
 
-      console.log(serializedSession);
+      // console.log(serializedSession);
 
-      const res = await axios.post(`${SERVER_URL}/api/store-session`, {
-        session: serializedSession
-      })
-      console.log(res.data)
+      // const res = await axios.post(`${SERVER_URL}/api/store-session`, {
+      //   session: serializedSession
+      // })
+      // console.log(res.data)
       
 
       setScreen("home");
