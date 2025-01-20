@@ -13,6 +13,8 @@ interface OnboardingScreenProps {
   setScreen: (screen: ScreenName) => void;
 }
 
+const SERVER_URL = import.meta.env.VITE_SERVER_URL
+
 const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ setScreen }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [loadingMessage, setLoadingMessage] = useState<string>("");
@@ -59,7 +61,12 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ setScreen }) => {
 
         const  serializedSession = capsuleClient.exportSession();
 
-        const res = await axios.post(http://)
+        const res = await axios.post(`${SERVER_URL}/store-session`, {
+          session: serializedSession
+        }
+
+        )
+        console.log(res.data)
 
         console.log(serializedSession);
   
