@@ -61,7 +61,7 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ setScreen }) => {
 
         const  serializedSession = capsuleClient.exportSession();
 
-        const res = await axios.post(`${SERVER_URL}/store-session`, {
+        const res = await axios.post(`${SERVER_URL}/api/store-session`, {
           session: serializedSession
         }
 
