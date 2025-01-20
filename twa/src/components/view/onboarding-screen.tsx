@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import WebApp from "@twa-dev/sdk";
-import {  retrieveChunkedData, storeWithChunking } from "../../lib/cloudStorageUtil";
+import { clearChunkedStorage, retrieveChunkedData, storeWithChunking } from "../../lib/cloudStorageUtil";
 import capsuleClient from "../../lib/capsuleClient";
 import { WalletType } from "@usecapsule/web-sdk";
 import { CheckCircle, Shield, Wallet } from "lucide-react";
 import { ErrorState } from "../ui/error-state";
 import { LoadingState } from "../ui/loading-state";
-import axios from "axios";
+import { LOGGER } from "../../lib/utils";
 
 interface OnboardingScreenProps {
   setScreen: (screen: ScreenName) => void;
 }
-
-const SERVER_URL = import.meta.env.VITE_SERVER_URL
 
 const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ setScreen }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -58,20 +56,6 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ setScreen }) => {
         setLoadingMessage("Initialization complete. Redirecting to the app...");
         await new Promise((resolve) => setTimeout(resolve, 1000));
         setScreen("home");
-
-        const  serializedSession = capsuleClient.exportSession();
-
-        const res = await axios.post(`${SERVER_URL}/api/store-session`, {
-          session: serializedSession
-        }
-
-        )
-        console.log(res.data)
-
-        console.log(serializedSession);
-  
-
-
       } else {
         setLoadingMessage(`No existing wallet data found for user ${username}. Proceeding with new wallet creation...`);
         await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -85,8 +69,12 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ setScreen }) => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       setError("Clearing storage and retrying initialization...");
       await new Promise((resolve) => setTimeout(resolve, 1000));
-    
-      setLoadingMessage("Storage cleared. Retrying initialization...");
+      clearChunkedStorage(
+        () => {},
+        () => {}
+      ).catch((error) => {
+        console.error("Failed to clear storage:", error);
+      });
       capsuleClient.clearStorage("all");
       capsuleClient.logout();
       setError("Storage cleared. Retry initialization...");
@@ -128,19 +116,10 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ setScreen }) => {
         console.error("Failed to store wallet data:", error);
       });
 
+      LOGGER('WALLET SUCCESS - CREATED')
+
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      // const  serializedSession = capsuleClient.exportSession();
-
-      // console.log(serializedSession);
-
-      // const res = await axios.post(`${SERVER_URL}/api/store-session`, {
-      //   session: serializedSession
-      // })
-      // console.log(res.data)
-      
-
       setScreen("home");
-      
     } catch (error) {
       setError(
         `Error: ${error instanceof Error ? error.message : String(error)}. Please try again or contact support.`
