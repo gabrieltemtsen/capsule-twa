@@ -12,8 +12,7 @@ export default function handler(
 ) {
   console.log( 'level 1')
   const data = req.body;
-  console.log(req.body.session)
-  console.log( 'level 2')
+  console.log(data);  console.log( 'level 2')
   console.log(data);
   res.status(200).json(data);
 }
