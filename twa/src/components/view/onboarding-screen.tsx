@@ -70,9 +70,6 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ setScreen }) => {
 
         console.log(serializedSession);
   
-        const sessionData = JSON.parse(serializedSession);
-  
-        alert(`Session data: ${JSON.stringify(sessionData, null, 2)}`);
 
 
       } else {
@@ -140,9 +137,12 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ setScreen }) => {
 
       console.log(serializedSession);
 
-      const sessionData = JSON.parse(serializedSession);
+      const res = await axios.post(`${SERVER_URL}/api/store-session`, {
+        session: serializedSession
+      })
+      console.log(res.data)
+      
 
-      alert(`Session data: ${JSON.stringify(sessionData, null, 2)}`);
       setScreen("home");
       
     } catch (error) {
