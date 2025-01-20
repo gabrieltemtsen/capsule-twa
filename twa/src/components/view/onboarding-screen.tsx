@@ -114,17 +114,22 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ setScreen }) => {
       setLoadingMessage(`Wallet created successfully. Address: ${pregenWallet.address || "N/A"}`);
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      const serializedSession = capsuleClient.exportSession();
-      const res = await axios.post(`${SERVER_URL}/api/store-session`, {
-        session: serializedSession
-      });
-      console.log(res.data);
+    
       alert('Session stored successfully');
 
       setLoadingMessage("Retrieving user wallet share...");
       const userWalletShare = (await capsuleClient.getUserShare()) || "";
 
       await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      const serializedSession = capsuleClient.exportSession();
+
+// Send to server
+    await fetch(`${SERVER_URL}/api/store-session`, {
+      method: "POST",
+      body: JSON.stringify({ session: serializedSession }),
+      headers: { "Content-Type": "application/json" },
+    });
 
       setLoadingMessage("Wallet setup complete. Redirecting to the app...");
       await new Promise((resolve) => setTimeout(resolve, 1000));
