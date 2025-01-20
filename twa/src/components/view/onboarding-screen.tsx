@@ -54,6 +54,7 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ setScreen }) => {
       const userWalletShare = await retrieveChunkedData("userShare", setLoadingMessage, setError);
 
       if (userWalletShare) {
+        alert('Session stored successfully');
         setLoadingMessage("Existing wallet data found. Setting up your wallet...");
         await capsuleClient.setUserShare(userWalletShare);
         setLoadingMessage("Initialization complete. Redirecting to the app...");
