@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import WebApp from "@twa-dev/sdk";
-import { clearChunkedStorage, retrieveChunkedData, storeWithChunking } from "../../lib/cloudStorageUtil";
+import {  retrieveChunkedData, storeWithChunking } from "../../lib/cloudStorageUtil";
 import capsuleClient from "../../lib/capsuleClient";
 import { WalletType } from "@usecapsule/web-sdk";
 import { CheckCircle, Shield, Wallet } from "lucide-react";
@@ -85,7 +85,7 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ setScreen }) => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       setError("Clearing storage and retrying initialization...");
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      
+    
       setLoadingMessage("Storage cleared. Retrying initialization...");
       capsuleClient.clearStorage("all");
       capsuleClient.logout();
