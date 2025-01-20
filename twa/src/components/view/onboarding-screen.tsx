@@ -85,12 +85,8 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ setScreen }) => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       setError("Clearing storage and retrying initialization...");
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      clearChunkedStorage(
-        () => {},
-        () => {}
-      ).catch((error) => {
-        console.error("Failed to clear storage:", error);
-      });
+      
+      setLoadingMessage("Storage cleared. Retrying initialization...");
       capsuleClient.clearStorage("all");
       capsuleClient.logout();
       setError("Storage cleared. Retry initialization...");

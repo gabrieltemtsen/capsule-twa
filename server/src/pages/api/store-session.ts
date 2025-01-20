@@ -4,16 +4,16 @@ import type { NextApiRequest, NextApiResponse } from "next";
 type Data = {
   message: string;
 };
+console.log("helloSTORING SESSION");
 
 export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>,
 ) {
-if (req.method === 'POST') {
-    const data = req.body;
-    console.log(data);
-    res.status(200).json(data);
-} else {
-    res.status(405).json({ message: 'Method Not Allowed' });
-}
+  console.log( 'level 1')
+  const data = req.body;
+  console.log(req.body.session)
+  console.log( 'level 2')
+  console.log(data);
+  res.status(200).json(data);
 }
