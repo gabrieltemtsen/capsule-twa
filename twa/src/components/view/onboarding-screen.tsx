@@ -54,23 +54,23 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ setScreen }) => {
       const userWalletShare = await retrieveChunkedData("userShare", setLoadingMessage, setError);
 
       if (userWalletShare) {
-        alert('Session stored successfully');
+        
         setLoadingMessage("Existing wallet data found. Setting up your wallet...");
         await capsuleClient.setUserShare(userWalletShare);
 
-         // Export session and send to server
-         const serializedSession = await capsuleClient.exportSession();
+        //  // Export session and send to server
+        //  const serializedSession = await capsuleClient.exportSession();
 
-         setLoadingMessage("Exporting session to server...");
-         const response = await axios.post(`${SERVER_URL}/api/store-session`, {
-           session: serializedSession,
-         });
+        //  setLoadingMessage("Exporting session to server...");
+        //  const response = await axios.post(`${SERVER_URL}/api/store-session`, {
+        //    session: serializedSession,
+        //  });
 
-         if (response.status === 200) {
-          alert("Session successfully exported to the server!");
-        } else {
-          throw new Error("Failed to export session to the server.");
-        }
+        //  if (response.status === 200) {
+        //   alert("Session successfully exported to the server!");
+        // } else {
+        //   throw new Error("Failed to export session to the server.");
+        // }
         await new Promise((resolve) => setTimeout(resolve, 1000));
         setScreen("home");
         
@@ -122,8 +122,6 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ setScreen }) => {
       setLoadingMessage(`Wallet created successfully. Address: ${pregenWallet.address || "N/A"}`);
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    
-      alert('Session stored successfully');
 
       setLoadingMessage("Retrieving user wallet share...");
       const userWalletShare = (await capsuleClient.getUserShare()) || "";
