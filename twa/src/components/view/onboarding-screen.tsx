@@ -8,13 +8,12 @@ import { CheckCircle, Shield, Wallet } from "lucide-react";
 import { ErrorState } from "../ui/error-state";
 import { LoadingState } from "../ui/loading-state";
 import { LOGGER } from "../../lib/utils";
-import axios from "axios";
 
 interface OnboardingScreenProps {
   setScreen: (screen: ScreenName) => void;
 }
 
-const SERVER_URL = import.meta.env.VITE_SERVER_URL;
+// const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
 const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ setScreen }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
