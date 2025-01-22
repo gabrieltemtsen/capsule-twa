@@ -20,7 +20,7 @@ export const BotCard: React.FC<BotCardProps> = ({
         <div className="flex items-center gap-3 mb-6">
           <div>
             <h2 className="font-medium text-lg text-foreground">
-              Capsule with gabe Bot
+              Capsule with gabe Bot and {username}
             </h2>
 
             <Button
