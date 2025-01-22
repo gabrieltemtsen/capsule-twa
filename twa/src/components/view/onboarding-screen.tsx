@@ -93,7 +93,7 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ setScreen }) => {
 
       const pregenIdentifier = `${username + crypto.randomUUID().split("-")[0]}@test.usecapsule.com`;
 
-      setLoadingMessage("Creating wallet with capsule knights..." + `${pregenIdentifier}`);
+      setLoadingMessage("Creating wallet with capsule knights...");
       const pregenWallet = await capsuleClient.createWalletPreGen(WalletType.EVM, pregenIdentifier);
       
       setLoadingMessage(`Wallet created successfully. with address: ${pregenWallet.address || "N/A"}`);

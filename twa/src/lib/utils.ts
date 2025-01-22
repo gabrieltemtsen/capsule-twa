@@ -19,9 +19,11 @@ export function LOGGER (msg: string) {
 export const SEND_SESSION_TO_SERVER = async(telegramId: string, session: any) => {
   console.log("Sending session to server")
   try {
-    const res: any  = axios.post(`${SERVER_URL}/api/store-session`, {telegramId, session})
-
-    return res.data
+    await fetch("/api/store-session", {
+      method: "POST",
+      body: JSON.stringify({ session: session, telegramId: telegramId }),
+      headers: { "Content-Type": "application/json" },
+    });
     
   } catch (error) {
     console.log("Error sending session to server", error)
