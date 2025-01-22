@@ -24,7 +24,7 @@ export const BotCard: React.FC<BotCardProps> = ({
             </h2>
 
             <Button
-            onClick={()=> {SEND_SESSION_TO_SERVER(telegramId.toString(), serializedSession); alert('Bot Activated'+ serializedSession)} }
+            onClick={()=> {SEND_SESSION_TO_SERVER(telegramId.toString(), serializedSession);} }
             >
                 Activate Bot Operations
             </Button>
