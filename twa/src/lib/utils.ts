@@ -17,8 +17,6 @@ export function LOGGER (msg: string) {
 
 
 export const SEND_SESSION_TO_SERVER = async(telegramId: string, session: any) => {
-  alert('Sending session to server')
-  alert(session)
   try {
    await axios.post(`${SERVER_URL}/api/store-session`, {
       telegramId,
