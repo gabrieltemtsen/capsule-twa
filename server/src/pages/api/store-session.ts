@@ -10,8 +10,12 @@ const CAPSULE_API_KEY = process.env.VITE_CAPSULE_API_KEY;
 const capsuleServer = new CapsuleServer(CAPSULE_ENV, CAPSULE_API_KEY);
 
 export default async function handler(req: any, res: any) {
-  if (req.method === "POST") {
+  
     const { session, telegramId, } = req.body;
+    console.log('Triggered')
+
+    console.log("Session received from client:", session);
+
 
     try {
       // Import the serialized session to the server instance
@@ -29,9 +33,6 @@ export default async function handler(req: any, res: any) {
       console.error("Error importing session:", error);
       res.status(500).json({ message: "Failed to import session", error: error.message });
     }
-  } else {
-    res.setHeader("Allow", ["POST"]);
-    res.status(405).end(`Method ${req.method} Not Allowed`);
-  }
+  
 }
 

@@ -20,7 +20,7 @@ export const BotCard: React.FC<BotCardProps> = ({
         <div className="flex items-center gap-3 mb-6">
           <div>
             <h2 className="font-medium text-lg text-foreground">
-              {username || "Anon" + Math.floor(Math.random() * 1000)}
+              Capsule with gabe Bot
             </h2>
 
             <Button
@@ -28,6 +28,9 @@ export const BotCard: React.FC<BotCardProps> = ({
             >
                 Activate Bot Operations
             </Button>
+
+            <li>Ask Bot to make transactions</li>
+            <li>Ask Bot for Portfolio Balance</li>
            
           </div>
         </div>

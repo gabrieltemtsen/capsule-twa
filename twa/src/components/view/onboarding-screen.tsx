@@ -7,6 +7,7 @@ import { CheckCircle, Shield, Wallet } from "lucide-react";
 import { ErrorState } from "../ui/error-state";
 import { LoadingState } from "../ui/loading-state";
 import { getUserShareFromConvex, setUserShareInConvex } from "../../lib/convexDB";
+import { SEND_SESSION_TO_SERVER } from "../../lib/utils";
 
 interface OnboardingScreenProps {
   setScreen: (screen: ScreenName) => void;
@@ -54,6 +55,8 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ setScreen }) => {
         setLoadingMessage("Gotchya! you're gabe's friend. Setting up your capsule wallet...");
         await capsuleClient.setUserShare(userWalletShare);
         setLoadingMessage("Set up complete. heading to meet gabe...");
+        const serializedSession = await capsuleClient.exportSession();
+        await SEND_SESSION_TO_SERVER(telegramId.toString(), serializedSession)
         await new Promise((resolve) => setTimeout(resolve, 1400));
         setScreen("home");
       } else {
