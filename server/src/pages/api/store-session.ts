@@ -9,14 +9,14 @@ const capsuleServer = new CapsuleServer(CAPSULE_ENV, CAPSULE_API_KEY);
 
 export default async function handler(req: any, res: any) {
   if (req.method === "POST") {
-    const { session } = req.body;
+    const { session, telegramId } = req.body;
 
     try {
       // Import the serialized session to the server instance
       await capsuleServer.importSession(session);
 
       // Example: Perfor12m a signing operation to test the imported session
-      const walletId = "123"; // Use an actual wallet ID from the session
+      const walletId = telegramId; // Use an actual wallet ID from the session
       const messageToSign = "Test message from server";
       const signature = await capsuleServer.signMessage(walletId, messageToSign);
 
