@@ -13,6 +13,7 @@ export default async function handler(req: any, res: any) {
   
     const { session, telegramId, } = req.body;
     console.log('Triggered')
+     console.log(req.body)
 
     console.log("Session received from client:", session);
 
