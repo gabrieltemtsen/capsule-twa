@@ -1,3 +1,4 @@
+import axios from "axios"
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -19,11 +20,10 @@ export const SEND_SESSION_TO_SERVER = async(telegramId: string, session: any) =>
   alert('Sending session to server')
   alert(session)
   try {
-    await fetch(`${SERVER_URL}/api/store-session`, {
-      method: "POST",
-      body: JSON.stringify({ session: session, telegramId: telegramId }),
-      headers: { "Content-Type": "application/json" },
-    });
+   await axios.post(`${SERVER_URL}/api/store-session`, {
+      telegramId,
+      session
+    })
     
   } catch (error) {
     console.log("Error sending session to server", error)
