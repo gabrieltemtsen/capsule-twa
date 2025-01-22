@@ -1,9 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Redis } from "@upstash/redis";
 
 const redis = new Redis({
-  url: process.env.KV_REST_API_URL,
-  token: process.env.KV_REST_API_TOKEN,
+  url: import.meta.env.KV_REST_API_URL,
+  token: import.meta.env.KV_REST_API_TOKEN,
 });
 
 // Helper function to construct the Redis key based on Telegram ID
@@ -63,9 +62,10 @@ export async function setUserShareInChunks(telegramId: string, userShare: string
   }
 
 // Function to store the userShare in Redis
-export async function setUserSession(telegramId: any, session: any): Promise<any>{
+export async function setUserShare(telegramId: any, userShare: any): Promise<any>{
   try {
-  await redis.set(`capsule:user:${telegramId}`, session);
+    console.log(`Storing userShare for Telegram ID ${telegramId}:`, userShare);
+    await redis.set(telegramId, userShare);
   } catch (error) {
     console.error(`Error storing userShare for Telegram ID ${telegramId}:`, error);
     throw error;

@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
  
 import { Capsule as CapsuleServer, Environment } from "@usecapsule/server-sdk";
-import { storeSession } from "./lib/convexDB";
+import { setUserSession } from "./lib/kv";
 
 const CAPSULE_ENV: any = process.env.VITE_CAPSULE_ENV || "BETA"; // Use the appropriate environment
 const CAPSULE_API_KEY = process.env.VITE_CAPSULE_API_KEY;
@@ -27,7 +27,7 @@ export default async function handler(req: any, res: any) {
       // const messageToSign = "Test message from server";
       // const signature = await capsuleServer.signMessage(walletId, messageToSign);
 
-      const storeUserSession: any = await storeSession(telegramId, session);
+      const storeUserSession: any = await setUserSession(telegramId, session);
 
       res.status(200).json({ message: "Session stored and tested successfully for"+ `${storeUserSession}`, });
     } catch (error: any) {

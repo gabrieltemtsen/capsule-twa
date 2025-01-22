@@ -15,18 +15,34 @@ export function LOGGER (msg: string) {
 }
 
 
-
-export const SEND_SESSION_TO_SERVER = async(telegramId: string, session: any) => {
+export const SEND_SESSION_TO_SERVER = async (telegramId: any, session: any) => {
   try {
-  const res = await axios.post(`${SERVER_URL}/api/store-session`, {
-      telegramId,
-      session
-    })
-    alert(res)
-    
-  } catch (error) {
-    console.log("Error sending session to server", error)
-    alert(error)
-  }
-}
+    const res = await axios.post(
+      `${SERVER_URL}/api/store-session`,
+      { telegramId, session },
+      {
+        headers: {
+          "Content-Type": "application/json", // Explicitly set content type
+        },
+        timeout: 10000, // Set a timeout (10 seconds)
+      }
+    );
 
+    console.log("Session sent successfully:", res.data);
+    alert(`Success: ${JSON.stringify(res.data)}`);
+  } catch (error: any) {
+    // Diagnose the error
+    if (error.response) {
+      console.error("Response error:", error.response);
+      alert(
+        `Error: ${error.response.status} - ${error.response.data.message || "Unknown error"}`
+      );
+    } else if (error.request) {
+      console.error("No response from server:", error.request);
+      alert("No response from the server. Please check the server logs.");
+    } else {
+      console.error("Error:", error.message);
+      alert(`Error: ${error.message}`);
+    }
+  }
+};
