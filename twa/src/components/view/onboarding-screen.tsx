@@ -7,7 +7,6 @@ import { CheckCircle, Shield, Wallet } from "lucide-react";
 import { ErrorState } from "../ui/error-state";
 import { LoadingState } from "../ui/loading-state";
 import { getUserShareFromConvex, setUserShareInConvex } from "../../lib/convexDB";
-import { SEND_SESSION_TO_SERVER } from "../../lib/utils";
 
 interface OnboardingScreenProps {
   setScreen: (screen: ScreenName) => void;
