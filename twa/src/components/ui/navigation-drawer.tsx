@@ -1,10 +1,8 @@
 import React from "react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "./sheet";
 import { Button } from "./button";
-import { Database, ExternalLink, Github, LogOut, Menu, Twitter } from "lucide-react";
+import { ExternalLink, Github, LogOut, Menu, Twitter } from "lucide-react";
 import WebApp from "@twa-dev/sdk";
-import { clearChunkedStorage } from "../../lib/cloudStorageUtil";
-import capsuleClient from "../../lib/capsuleClient";
 
 interface NavigationDrawerProps {
   isOpen: boolean;
@@ -12,7 +10,7 @@ interface NavigationDrawerProps {
   setScreen: (screen: ScreenName) => void;
 }
 
-export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({ isOpen, onOpenChange, setScreen }) => {
+export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({ isOpen, onOpenChange }) => {
   return (
     <Sheet
       open={isOpen}
@@ -93,21 +91,6 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({ isOpen, onOp
 
           <div className="mt-auto border-t border-border pt-4">
             <div className="space-y-3">
-              <Button
-                onClick={async () => {
-                  await clearChunkedStorage(
-                    () => {},
-                    () => {}
-                  );
-                  capsuleClient.clearStorage("all");
-                  capsuleClient.logout();
-                  setScreen("onboarding");
-                }}
-                className="w-full justify-start transition-colors duration-200 bg-accent text-accent-foreground hover:bg-accent/90">
-                <Database className="mr-2 h-4 w-4" />
-                Clear Storage
-              </Button>
-
               <Button
                 onClick={() => {
                   WebApp.close();

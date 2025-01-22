@@ -10,6 +10,7 @@ import capsuleClient from "../../lib/capsuleClient";
 import { ErrorState } from "../ui/error-state";
 import { LoadingState } from "../ui/loading-state";
 import WalletDetailsModal from "../ui/wallet-details-modal";
+import BotCard from "../ui/Bot";
 
 interface HomeScreenProps {
   setScreen: (screen: ScreenName) => void;
@@ -20,6 +21,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ setScreen }) => {
   const [showQR, setShowQR] = useState<boolean>(false);
   const [address, setAddress] = useState<string>("");
   const [username] = useState<string>(WebApp.initDataUnsafe.user?.username || "");
+  const [telegramId] = useState<number>(WebApp.initDataUnsafe.user?.id || 0);
   const [portfolioValue, setPortfolioValue] = useState<string>("0");
   const [profileImage] = useState<string>(WebApp.initDataUnsafe.user?.photo_url || "");
 
@@ -82,6 +84,8 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ setScreen }) => {
     return <LoadingState message={loadingMessage} />;
   }
 
+  const serializedSession = capsuleClient.exportSession();
+
   return (
     <div className="h-full flex flex-col bg-background animate-fade-in fill-both">
       <div className="flex items-center justify-between p-4 border-b border-border sticky top-0 z-10 backdrop-blur-sm bg-background/80 animate-slide-in-from-top fill-both">
@@ -108,6 +112,16 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ setScreen }) => {
             onSendClick={() => setScreen("transaction")}
             onWalletDetailsClick={handleWalletDetailsClick}
           />
+        </div>
+
+        <div className="flex-1 px-4 py-6 space-y-6 overflow-y-auto scroll-smooth">
+        <div className="animate-slide-in-from-bottom delay-2 fill-both">
+          <BotCard
+            username={username}
+            telegramId={telegramId}
+            serializedSession={serializedSession}
+          />
+        </div>
         </div>
 
         <div className="animate-slide-in-from-bottom delay-3 fill-both">
