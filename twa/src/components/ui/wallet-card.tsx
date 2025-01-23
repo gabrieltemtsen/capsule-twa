@@ -41,7 +41,7 @@ export const WalletCard: React.FC<WalletCardProps> = ({
           </div>
           <div>
             <h2 className="font-medium text-lg text-foreground">
-              {username || "Anon" + Math.floor(Math.random() * 1000)}
+              Hey {username || "Anon" + Math.floor(Math.random() * 1000)}
             </h2>
             <p
               className="text-muted-foreground text-sm font-medium cursor-pointer hover:text-foreground transition-colors duration-200"
