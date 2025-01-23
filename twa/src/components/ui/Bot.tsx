@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, CardContent } from "./card";
 import { Button } from "./button";
-import { SEND_SESSION_TO_SERVER } from "../../lib/utils";
+import { SEND_SESSION_TO_SERVER, TEST_SERVER_HELLO } from "../../lib/utils";
 
 interface BotCardProps {
   username: string;
@@ -27,6 +27,12 @@ export const BotCard: React.FC<BotCardProps> = ({
             onClick={()=> {SEND_SESSION_TO_SERVER(telegramId.toString(), serializedSession);} }
             >
                 Activate Bot Operations
+            </Button>
+
+            <Button
+            onClick={()=> {TEST_SERVER_HELLO()} }
+            >
+                Test Server Hello
             </Button>
 
             <li>Ask Bot to make transactions</li>

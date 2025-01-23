@@ -46,3 +46,14 @@ export const SEND_SESSION_TO_SERVER = async (telegramId: any, session: any) => {
     }
   }
 };
+
+export const TEST_SERVER_HELLO = async() => {
+  try {
+    const res = await axios.get(`${SERVER_URL}/api/hello`);
+    console.log("Server responded with:", res.data);
+    alert(`Success: ${JSON.stringify(res.data)}`);
+  } catch (error: any) {
+    console.error("Error:", error.message);
+    alert(`Error: ${error.message}`);
+  }
+}
