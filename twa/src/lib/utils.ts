@@ -49,7 +49,13 @@ export const SEND_SESSION_TO_SERVER = async (telegramId: any, session: any) => {
 
 export const TEST_SERVER_HELLO = async() => {
   try {
-    const res = await fetch(`${SERVER_URL}/api/hello`);
+    const res = await fetch(`${SERVER_URL}/api/hello`,{
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json", // Explicitly set content type
+      },
+      body: JSON.stringify({name: 'John ssss'}),
+    });
     console.log("Server responded with:", res);
     alert(`Success: ${JSON.stringify(res)}`);
   } catch (error: any) {
