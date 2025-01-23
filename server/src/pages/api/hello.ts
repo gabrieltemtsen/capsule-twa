@@ -10,4 +10,9 @@ export default function handler(
   res: NextApiResponse<Data>,
 ) {
   res.status(200).json({ name: "John Doe" });
+
+  if(req.method === 'POST') {
+    console.log('POST request received');
+    res.status(200).json({ name: "John DoePOst" });
+  }
 }
