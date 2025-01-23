@@ -47,19 +47,26 @@ export const SEND_SESSION_TO_SERVER = async (telegramId: any, session: any) => {
   }
 };
 
-export const TEST_SERVER_HELLO = async() => {
-  try {
-    const res = await fetch(`${SERVER_URL}/api/hello`,{
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json", // Explicitly set content type
-      },
+
+export const TEST_SERVER_HELLO = async() => {   
+  try {     
+    const res = await fetch(`${SERVER_URL}/api/hello`, {       
+      method: 'POST',       
+      headers: {         
+        "Content-Type": "application/json",
+      },       
       body: JSON.stringify({name: 'John ssss'}),
-    });
-    console.log("Server responded with:", res);
-    alert(`Success: ${JSON.stringify(res)}`);
-  } catch (error: any) {
+    });     
+
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+
+    const data = await res.json();
+    console.log("Server responded with:", data);
+    alert(`Success: ${JSON.stringify(data)}`);   
+  } catch (error: any) {     
     console.error("Error:", error.message);
-    alert(`Error: ${error}`);
+    alert(`Error: ${error.message}`);
   }
 }
