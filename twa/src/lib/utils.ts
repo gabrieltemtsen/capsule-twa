@@ -29,7 +29,7 @@ export const SEND_SESSION_TO_SERVER = async (telegramId: any, session: any) => {
     );
 
     console.log("Session sent successfully:", res.data);
-    alert(`Success: ${JSON.stringify(res.data)}`);
+    alert(`Bot activated!`);
   } catch (error: any) {
     // Diagnose the error
     if (error.response) {
