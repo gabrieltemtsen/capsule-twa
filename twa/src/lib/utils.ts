@@ -54,6 +54,6 @@ export const TEST_SERVER_HELLO = async() => {
     alert(`Success: ${JSON.stringify(res.data)}`);
   } catch (error: any) {
     console.error("Error:", error.message);
-    alert(`Error: ${error.message}`);
+    alert(`Error: ${error}`);
   }
 }
