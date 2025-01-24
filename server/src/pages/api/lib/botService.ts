@@ -66,9 +66,12 @@ const initializeBot = () => {
         );
       }
 
-      // Import session and validate
-      await capsule.importSession(userSession);
+      
+      const ress = await capsule.importSession(userSession);
+      console.log('session: ',userSession)
+      console.log('ImportSession: ', ress);
       const isSessionActive = await capsule.isSessionActive();
+      console.log('isSessionActive: ', isSessionActive);
       if (!isSessionActive) {
         return bot.sendMessage(
           chatId,
@@ -76,7 +79,7 @@ const initializeBot = () => {
           {
             reply_markup: {
               inline_keyboard: [
-                [{ text: "Reactivate Bot", url: `${process.env.WEB_APP_URL}/activate` }],
+                [{ text: "Reactivate Bot", url: `${process.env.VITE_SERVER_URL}/activate` }],
               ],
             },
           }
