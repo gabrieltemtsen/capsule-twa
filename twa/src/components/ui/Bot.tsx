@@ -16,7 +16,7 @@ export const BotCard: React.FC<BotCardProps> = ({
 }) => {
   return (
     <Card className="bg-background border-border">
-      <CardContent className="pt-6 p-6">
+      <CardContent className="pt-6 p-7">
         <div className="flex items-center gap-3 mb-6">
           <div>
             <h2 className="font-medium text-lg text-foreground">
@@ -29,8 +29,10 @@ export const BotCard: React.FC<BotCardProps> = ({
                 Activate Bot Operations
             </Button>
 
-            <li>Ask Bot to make transactions</li>
-            <li>Ask Bot for Portfolio Balance</li>
+           <div className="text-sm text-muted-foreground">
+           <li>Ask Bot to make transactions</li>
+           <li>Ask Bot for Portfolio Balance</li>
+           </div>
 
             {/* <Button
             onClick={()=> {TEST_SERVER_HELLO();} }
