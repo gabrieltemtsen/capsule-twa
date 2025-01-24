@@ -2,8 +2,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-require-imports */
  
-
+import { Capsule as CapsuleServer, Environment } from "@usecapsule/server-sdk";
+import { Redis } from "@upstash/redis";
 const TelegramBot = require('node-telegram-bot-api');
+import { ethers } from "ethers";
+import { CapsuleEthersSigner } from "@usecapsule/ethers-v6-integration";
+import capsuleClient from "./capsuleClient";
+
+const CAPSULE_ENV: Environment = process.env.CAPSULE_ENV as Environment;
+const capsule = new CapsuleServer(CAPSULE_ENV, process.env.CAPSULE_API_KEY);
+const redis = new Redis({
+  url: process.env.KV_REST_API_URL,
+  token: process.env.KV_REST_API_TOKEN,
+});
 
 let bot: typeof TelegramBot | null = null;
 
@@ -30,47 +41,92 @@ const initializeBot = () => {
     console.error('Polling error:', error);
   });
 
-  bot.on('message', async (message: any) => {
-    console.log('Received message:', message);
+  bot.on("message", async (message: any) => {
     const chatId = message.chat.id;
-    const userName = message.chat.username || message.chat.first_name || 'Anonymous';
-    const timestamp = Date.now();
+    const telegramId = message.from.id;
 
-    if (message.chat.type !== 'private') {
-      return;
+    if (!message.text?.startsWith("/")) {
+      return bot.sendMessage(chatId, "Please use /balance or /transfer commands.");
     }
-    let messageType: any = 'text'; // Default type
-    let content = message.text || '';
 
-    if (message.photo) {
-      messageType = 'image';
+    try {
+      // Check user session in Redis
+      const userSession: any = await redis.get(`capsule:user:${telegramId}`);
+      if (!userSession) {
+        return bot.sendMessage(
+          chatId,
+          "Your session is inactive. Please activate the bot via the link below:",
+          {
+            reply_markup: {
+              inline_keyboard: [
+                [{ text: "Activate Bot", url: `${process.env.VITE_SERVER_URL}/activate` }],
+              ],
+            },
+          }
+        );
+      }
 
-      // Store the file_id of the highest resolution image available
-      const largestImage = message.photo.sort((a: any, b: any) => b.file_size - a.file_size)[0];
-      const fileInfo = await bot.getFile(largestImage.file_id);
-      const filePath = fileInfo.file_path;
+      // Import session and validate
+      await capsule.importSession(userSession);
+      const isSessionActive = await capsule.isSessionActive();
+      if (!isSessionActive) {
+        return bot.sendMessage(
+          chatId,
+          "Your session has expired. Please reactivate the bot using the link below:",
+          {
+            reply_markup: {
+              inline_keyboard: [
+                [{ text: "Reactivate Bot", url: `${process.env.WEB_APP_URL}/activate` }],
+              ],
+            },
+          }
+        );
+      }
 
-      content = `https://api.telegram.org/file/bot${TELEGRAM_TOKEN}/${filePath}`;
-      console.log(8121, content);
+      // Handle commands
+      const command = message.text.split(" ")[0];
+      switch (command) {
+        case "/balance": {
+          const provider = new ethers.JsonRpcProvider("https://ethereum-sepolia-rpc.publicnode.com");
+          const signer = new CapsuleEthersSigner(capsuleClient, provider);
+          const address = await signer.getAddress();
+          const balance = await provider.getBalance(address);
+          const balanceEth = ethers.formatEther(balance);
+          return bot.sendMessage(chatId, `Your wallet balance is ${balanceEth} ETH.`);
+        }
 
-    } else if (message.voice) {
-      messageType = 'audio';
-      const fileInfo = await bot.getFile(message.voice.file_id);
-      const filePath = fileInfo.file_path;
+        case "/transfer": {
+          const [_, toAddress, amount] = message.text.split(" ");
+          if (!toAddress || !amount) {
+            return bot.sendMessage(chatId, "Usage: /transfer <toAddress> <amount>");
+          }
 
-      content = `https://api.telegram.org/file/bot${TELEGRAM_TOKEN}/${filePath}`;
+          const provider = new ethers.JsonRpcProvider("https://ethereum-sepolia-rpc.publicnode.com");
+          const signer = new CapsuleEthersSigner(capsuleClient, provider);
 
+          const address = await signer.getAddress();
+          const tx = {
+            from: address,
+            to: toAddress,
+            value: ethers.parseUnits(amount, "ether"),
+          };
+
+          const signedTx = await signer.signTransaction(tx);
+          // Typically, you'd broadcast the transaction here (e.g., via `provider.sendTransaction`)
+          return bot.sendMessage(chatId, `Transaction signed successfully: ${signedTx}`);
+        }
+
+        default:
+          return bot.sendMessage(chatId, "Unknown command. Use /balance or /transfer.");
+      }
+    } catch (error) {
+      console.error("Error handling message:", error);
+      return bot.sendMessage(chatId, "An error occurred while processing your request.");
     }
-    //sending message to user - Auto reply
-    const response = `You said: ${message.text || 'you sent an image or audio'}`;
-    console.log('Sending response:', response);
-
-    bot.sendMessage(chatId, response).catch((error: any) => {
-      console.error('Error sending message:', error);
-    });
   });
 
-  console.log('Telegram Bot Service Initialized and polling started');
+
+  console.log("Telegram Bot Service Initialized and polling started");
 
   // Define the functions to be exported
 

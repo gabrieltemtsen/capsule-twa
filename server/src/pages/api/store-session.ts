@@ -50,7 +50,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       message: `Session stored successfully for ${telegramId}`,
       result: storeUserSession 
     });
-    await sendMessage(telegramId, "Thank you for activiating me! 🚀 what would you like to do Today ?");
+    const options = ['View Balance', 'Transfer Funds', 'View Transactions', 'Launch Capsule'];
+    await sendMessage(telegramId, "Thank you for activiating me! 🚀 what would you like to do Today ?", );
   } catch (error: any) {
     console.error("Error storing session:", error);
     res.status(500).json({ 

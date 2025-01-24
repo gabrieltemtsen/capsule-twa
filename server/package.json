@@ -10,9 +10,12 @@
   },
   "dependencies": {
     "@upstash/redis": "^1.34.3",
+    "@usecapsule/ethers-v6-integration": "^2.18.0",
     "@usecapsule/server-sdk": "^2.17.0",
+    "@usecapsule/web-sdk": "^2.18.0",
     "axios": "^1.7.9",
     "convex": "^1.18.2",
+    "ethers": "^6.13.5",
     "next": "15.1.5",
     "node-telegram-bot-api": "^0.66.0",
     "react": "^19.0.0",
