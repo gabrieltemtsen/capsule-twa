@@ -10,13 +10,13 @@ services:
     environment:
       NODE_ENV: "dev"
       NEXT_PUBLIC_ENV: "development"
-      NEXT_PUBLIC_TELEGRAM_BOT_TOKEN_DEV: "7572883672:AAFjU1nTw0rYFe-XZ1cBfc-Pp5eJppAVmQM"
-      NEXT_PUBLIC_TELEGRAM_BOT_TOKEN: "7572883672:AAFjU1nTw0rYFe-XZ1cBfc-Pp5eJppAVmQM"
-      CAPSULE_API_KEY: "9996dfb2a200047f69b2a7f3ba7ff6f3"
+      NEXT_PUBLIC_TELEGRAM_BOT_TOKEN_DEV: ""
+      NEXT_PUBLIC_TELEGRAM_BOT_TOKEN: ""
+      CAPSULE_API_KEY: ""
       CAPSULE_ENV: "BETA"
-      VITE_SERVER_URL: "https://61bb-2c0f-2a80-dd-3210-8d11-71e-51e5-1b9f.ngrok-free.app"
-      KV_REST_API_TOKEN: "AcbVAAIjcDEzYmI1YjQ1OTE1NmM0NGVjYmE0YzIwZmMzNWY3MmM4NXAxMA"
-      KV_REST_API_URL: "https://internal-mink-50901.upstash.io"
+      VITE_SERVER_URL: ""
+      KV_REST_API_TOKEN: ""
+      KV_REST_API_URL: ""
     volumes:
       - .:/src
     command: ["npm", "run", "start"]

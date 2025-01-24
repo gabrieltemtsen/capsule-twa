@@ -67,9 +67,9 @@ const initializeBot = () => {
       }
 
       
-      const ress = await capsule.importSession(userSession);
+      const sessionImport = await capsule.importSession(userSession);
       console.log('session: ',userSession)
-      console.log('ImportSession: ', ress);
+      console.log('ImportSession: ', sessionImport);
       const isSessionActive = await capsule.isSessionActive();
       console.log('isSessionActive: ', isSessionActive);
       if (!isSessionActive) {
