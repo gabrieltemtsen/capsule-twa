@@ -9,8 +9,8 @@ import { ethers } from "ethers";
 import { CapsuleEthersSigner } from "@usecapsule/ethers-v6-integration";
 import capsuleClient from "./capsuleClient";
 
-const CAPSULE_ENV: Environment = process.env.CAPSULE_ENV as Environment;
-const capsule = new CapsuleServer(CAPSULE_ENV, process.env.CAPSULE_API_KEY);
+const CAPSULE_ENV: Environment = process.env.VITE_CAPSULE_ENV as Environment;
+const capsule = new CapsuleServer(CAPSULE_ENV, process.env.VITE_CAPSULE_API_KEY);
 const redis = new Redis({
   url: process.env.KV_REST_API_URL,
   token: process.env.KV_REST_API_TOKEN,
