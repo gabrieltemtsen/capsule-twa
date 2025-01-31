@@ -38,7 +38,7 @@ const initializeBot = () => {
   bot = new TelegramBot(TELEGRAM_TOKEN, { polling: true });
 
   bot.on('polling_error', (error: any) => {
-    console.error('Polling error:', error);
+    console.error('Polling error:',);
   });
 
   bot.on("message", async (message: any) => {
@@ -67,10 +67,12 @@ const initializeBot = () => {
       }
 
       
-      const sessionImport = await capsuleClient.importSession(userSession);
-      console.log('session: ',userSession)
-      console.log('ImportSession: ', sessionImport);
-      const isSessionActive = await capsuleClient.isSessionActive();
+      const sessionImport = await capsule.importSession(userSession);
+      const sessionCookie = await capsule.retrieveSessionCookie()
+      console.log('sessionCookie: ********COOKIE******* ', sessionCookie);
+      const touchSession = await capsule.touchSession();
+      console.log('touchSession: *****TOUCSESSION***** ', touchSession);
+      const isSessionActive = await capsule.isSessionActive();
       console.log('isSessionActive: ', isSessionActive);
       if (!isSessionActive) {
         return bot.sendMessage(
@@ -78,6 +80,7 @@ const initializeBot = () => {
           "Your session has expired. Please reactivate the bot using the link below:",
           {
             reply_markup: {
+              
               inline_keyboard: [
                 [{ text: "Reactivate Bot", url: `${process.env.VITE_SERVER_URL}/activate` }],
               ],

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Redis } from "@upstash/redis";
+import capsuleClient from "./capsuleClient";
 
 const redis = new Redis({
   url: process.env.KV_REST_API_URL,
@@ -27,6 +28,7 @@ export async function getUserShare(telegramId: string): Promise<string | null> {
 // Function to store the userShare in Redis
 export async function setUserSession(telegramId: any, session: any): Promise<any>{
   try {
+    await capsuleClient.keepSessionAlive();
   await redis.set(`capsule:user:${telegramId}`, session);
   } catch (error) {
     console.error(`Error storing userShare for Telegram ID ${telegramId}:`, error);

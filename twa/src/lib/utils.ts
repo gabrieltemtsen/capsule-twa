@@ -18,10 +18,15 @@ export function LOGGER (msg: string) {
 
 export const SEND_SESSION_TO_SERVER = async (telegramId: any, session: any) => {
   await capsuleClient.keepSessionAlive();
+
+  // decode the capsule session and remove the signer
+const { signer, ...rest } = JSON.parse(atob(session))
+// encode the capsule session without the signer
+const capsuleSessionWithoutSigner = btoa(JSON.stringify(rest));
   try {
     const res = await axios.post(
       `${SERVER_URL}/api/store-session`,
-      { telegramId, session },
+      { telegramId, session: capsuleSessionWithoutSigner },
       {
         headers: {
           "Content-Type": "application/json", // Explicitly set content type
