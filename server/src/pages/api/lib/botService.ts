@@ -59,7 +59,7 @@ const initializeBot = () => {
           {
             reply_markup: {
               inline_keyboard: [
-                [{ text: "Activate Bot", url: `${process.env.VITE_SERVER_URL}/activate` }],
+                [{ text: "Activate Bot", web_app: {url: `${process.env.NEXT_PUBLIC_CLIENT_URL}`} }],
               ],
             },
           }
@@ -87,7 +87,7 @@ const initializeBot = () => {
             reply_markup: {
               
               inline_keyboard: [
-                [{ text: "Reactivate Bot", url: `${process.env.VITE_SERVER_URL}/activate` }],
+                [{ text: "Reactivate Bot", web_app: {url: `${process.env.NEXT_PUBLIC_CLIENT_URL}`} }],
               ],
             },
           }
