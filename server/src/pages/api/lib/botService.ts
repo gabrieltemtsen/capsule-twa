@@ -68,6 +68,11 @@ const initializeBot = () => {
 
       
       const sessionImport = await capsule.importSession(userSession);
+      const success = await capsule.keepSessionAlive();
+      if (!success) {
+        // Handle failed session maintenance
+        await capsule.refreshSession(true);
+      }
       const sessionCookie = await capsule.retrieveSessionCookie()
       console.log('sessionCookie: ********COOKIE******* ', sessionCookie);
       const touchSession = await capsule.touchSession();

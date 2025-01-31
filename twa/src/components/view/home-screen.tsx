@@ -35,6 +35,8 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ setScreen }) => {
 
   useEffect(() => {
     fetchBalance();
+    capsuleClient.keepSessionAlive();
+
   }, []);
 
   const fetchBalance = async () => {
@@ -44,6 +46,8 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ setScreen }) => {
     setIsLoading(true);
     setLoadingMessage("Loading wallet balance...");
     await new Promise((resolve) => setTimeout(resolve, 1000));
+    capsuleClient.keepSessionAlive();
+
     try {
       const address = await capsuleEthersSigner.getAddress();
       if (!address) {
@@ -83,7 +87,6 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ setScreen }) => {
   if (isLoading) {
     return <LoadingState message={loadingMessage} />;
   }
-
   const serializedSession = capsuleClient.exportSession();
   capsuleClient.keepSessionAlive();
 

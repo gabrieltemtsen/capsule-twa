@@ -7,10 +7,11 @@ import { Capsule as CapsuleServer, Environment } from "@usecapsule/server-sdk";
 import { setUserSession } from "./lib/kv";
 import { sendMessage } from "./lib/botService";
 
-const CAPSULE_ENV: any = process.env.VITE_CAPSULE_ENV || "BETA"; // Use the appropriate environment
 const CAPSULE_API_KEY = process.env.VITE_CAPSULE_API_KEY;
 
-const capsuleServer = new CapsuleServer(CAPSULE_ENV, CAPSULE_API_KEY);
+
+const CAPSULE_ENV: Environment = process.env.VITE_CAPSULE_ENV as Environment;
+const capsule = new CapsuleServer(CAPSULE_ENV, process.env.VITE_CAPSULE_API_KEY);
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   // Add CORS headers
@@ -41,7 +42,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     console.log('Triggered');
     console.log('Request Body:', req.body);
-    console.log("Session received from client:", session);
+    await capsule.importSession(session);
+
+    const isActive = await capsule.isSessionActive();
+    
+    if (!isActive) {
+      console.log('Session expired');
+      return res.status(401).json({ error: "Session expired" });
+    }
+
+    // Perform authenticated operations
+    const walletId = capsule.currentWalletIdsArray[0]?.[0];
+    console.log("WALLET-ID:", walletId);
+
+    res.json({ walletId });
 
     // Store user session
     const storeUserSession = await setUserSession(telegramId, session);
