@@ -67,10 +67,10 @@ const initializeBot = () => {
       }
 
       
-      const sessionImport = await capsule.importSession(userSession);
+      const sessionImport = await capsuleClient.importSession(userSession);
       console.log('session: ',userSession)
       console.log('ImportSession: ', sessionImport);
-      const isSessionActive = await capsule.isSessionActive();
+      const isSessionActive = await capsuleClient.isSessionActive();
       console.log('isSessionActive: ', isSessionActive);
       if (!isSessionActive) {
         return bot.sendMessage(

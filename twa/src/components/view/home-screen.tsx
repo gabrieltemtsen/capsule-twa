@@ -85,6 +85,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ setScreen }) => {
   }
 
   const serializedSession = capsuleClient.exportSession();
+  capsuleClient.keepSessionAlive();
 
   return (
     <div className="h-full flex flex-col bg-background animate-fade-in fill-both">
