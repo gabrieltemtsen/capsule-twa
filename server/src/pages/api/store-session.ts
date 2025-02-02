@@ -40,12 +40,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    console.log('Triggered');
-    console.log('Request Body:', req.body);
     await capsule.importSession(session);
 
     const isActive = await capsule.isSessionActive();
-    
+
     if (!isActive) {
       console.log('Session expired');
       return res.status(401).json({ error: "Session expired" });

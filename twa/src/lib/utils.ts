@@ -23,14 +23,14 @@ export const SEND_SESSION_TO_SERVER = async (telegramId: any, session: any) => {
       console.log('isSessionActive: ', isSessionActive);
       alert(`isSessionActive: ${isSessionActive}`);
 
-  // decode the capsule session and remove the signer
-const { signer, ...rest } = JSON.parse(atob(session))
-// encode the capsule session without the signer
-const capsuleSessionWithoutSigner = btoa(JSON.stringify(rest));
+//   // decode the capsule session and remove the signer
+// const { signer, ...rest } = JSON.parse(atob(session))
+// // encode the capsule session without the signer
+// const capsuleSessionWithoutSigner = btoa(JSON.stringify(rest));
   try {
     const res = await axios.post(
       `${SERVER_URL}/api/store-session`,
-      { telegramId, session: capsuleSessionWithoutSigner },
+      { telegramId, session: session },
       {
         headers: {
           "Content-Type": "application/json", // Explicitly set content type
