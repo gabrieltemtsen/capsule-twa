@@ -5,7 +5,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
  
 import { Capsule as CapsuleServer, Environment } from "@usecapsule/server-sdk";
 import { setUserSession } from "./lib/kv";
-import { sendMessage } from "./lib/botService";
+import sendMessage  from "./lib/botService";
 
 const CAPSULE_API_KEY = process.env.VITE_CAPSULE_API_KEY;
 

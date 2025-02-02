@@ -19,9 +19,6 @@ export function LOGGER (msg: string) {
 export const SEND_SESSION_TO_SERVER = async (telegramId: any, session: any) => {
   await capsuleClient.keepSessionAlive();
 
-  const isSessionActive = await capsuleClient.isSessionActive();
-      console.log('isSessionActive: ', isSessionActive);
-      alert(`isSessionActive: ${isSessionActive}`);
 
 //   // decode the capsule session and remove the signer
 // const { signer, ...rest } = JSON.parse(atob(session))
@@ -50,7 +47,7 @@ export const SEND_SESSION_TO_SERVER = async (telegramId: any, session: any) => {
       );
     } else if (error.request) {
       console.error("No response from server:", error.request);
-      alert("No response from the server. Please check the server logs.");
+      alert("No response gotten please try again then check your Dm.");
     } else {
       console.error("Error:", error.message);
       alert(`Error: ${error.message}`);
