@@ -12,12 +12,13 @@ interface BotCardProps {
 export const BotCard: React.FC<BotCardProps> = ({ username, telegramId, serializedSession }) => {
   const [isSessionActive, setIsSessionActive] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
+  const [activationInProgress, setActivationInProgress] = useState<boolean>(false);
 
   useEffect(() => {
     const checkSession = async () => {
       setLoading(true);
       try {
-        const status = await IsServerSessionActive(telegramId)
+        const status = await IsServerSessionActive(telegramId);
         setIsSessionActive(status);
       } catch (error) {
         console.error("Error checking session status:", error);
@@ -27,7 +28,21 @@ export const BotCard: React.FC<BotCardProps> = ({ username, telegramId, serializ
     };
 
     checkSession();
-  }, []);
+  }, [telegramId]);
+
+  const handleActivateBot = async () => {
+    setActivationInProgress(true);
+    try {
+      await SEND_SESSION_TO_SERVER(telegramId.toString(), serializedSession);
+      // Re-check session after activation
+      const status = await IsServerSessionActive(telegramId);
+      setIsSessionActive(status);
+    } catch (error) {
+      console.error("Error activating bot:", error);
+    } finally {
+      setActivationInProgress(false);
+    }
+  };
 
   return (
     <Card className="bg-background border-border shadow-md rounded-xl overflow-hidden">
@@ -45,12 +60,17 @@ export const BotCard: React.FC<BotCardProps> = ({ username, telegramId, serializ
             </div>
           ) : (
             <>
-              <Button
-                onClick={() => SEND_SESSION_TO_SERVER(telegramId.toString(), serializedSession)}
-                className="bg-primary text-white px-4 py-2 rounded-lg"
-              >
-                Activate Bot Operations
-              </Button>
+              {activationInProgress ? (
+                <p className="text-sm text-muted-foreground">Activating bot session...</p>
+              ) : (
+                <Button
+                  onClick={handleActivateBot}
+                  className="bg-primary text-white px-4 py-2 rounded-lg"
+                  disabled={activationInProgress}
+                >
+                  Activate Bot Operations
+                </Button>
+              )}
               <p className="text-sm text-muted-foreground">
                 Activate the bot to enable operations like portfolio balance checks and transactions.
               </p>

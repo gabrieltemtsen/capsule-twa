@@ -41,42 +41,51 @@ const initializeBot = () => {
   bot.on("message", async (message: any) => {
     const chatId = message.chat.id;
     const telegramId = message.from.id;
-
+  
     if (!message.text?.startsWith("/")) {
       return handleNaturalLanguageQuery(message);
     }
-
+  
     try {
-      console.log('Message received:', message.text);
+      console.log("Message received:", message.text);
+  
       // Check user session in Redis
       const userSession: any = await redis.get(`capsule:user:${telegramId}`);
       if (!userSession) {
+        console.warn(`No session found for Telegram ID ${telegramId}`);
         return sendActivationLink(chatId, "Your session is inactive. Please activate the bot:");
       }
-
-      // Import session and check if it's active
-      await capsule.importSession(userSession);
-      const isSessionActive = await capsule.keepSessionAlive();
-      if (!isSessionActive) {
-        await capsule.refreshSession(true);
-        return sendActivationLink(chatId, "Your session has expired. Please reactivate the bot:");
+  
+      try {
+        // Import session and check if it's active
+        await capsule.importSession(userSession);
+        const isSessionActive = await capsule.keepSessionAlive();
+  
+        if (!isSessionActive) {
+          console.warn(`Session expired for Telegram ID ${telegramId}`);
+          await capsule.refreshSession(true);  // Attempt to refresh the session
+          return sendActivationLink(chatId, "Your session has expired. Please reactivate the bot:");
+        }
+      } catch (sessionError) {
+        console.error("Session handling error:", sessionError);
+        return sendActivationLink(chatId, "An error occurred while managing your session. Please reactivate the bot.");
       }
-
+  
       // Handle commands
       const command = message.text.split(" ")[0].toLowerCase();
       switch (command) {
         case "/balance":
           return await handleBalance(chatId);
-
+  
         case "/address":
           return await handleAddress(chatId);
-
+  
         case "/history":
           return await handleTransactionHistory(chatId);
-
+  
         case "/transfer":
           return await handleTransferCommand(chatId, message.text);
-
+  
         case "/info":
           return bot.sendMessage(
             chatId,
@@ -87,15 +96,16 @@ const initializeBot = () => {
             "/transfer <toAddress> <amount> - Transfer funds\n" +
             "/info - View bot details"
           );
-
+  
         default:
           return bot.sendMessage(chatId, "Unknown command. Use /info to see available commands.");
       }
     } catch (error) {
       console.error("Error handling message:", error);
-      return bot.sendMessage(chatId, "An error occurred while processing your request.");
+      return bot.sendMessage(chatId, "An unexpected error occurred while processing your request.");
     }
   });
+  
 
   console.log("Telegram Bot Service Initialized and polling started");
 
