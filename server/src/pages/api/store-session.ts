@@ -63,7 +63,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       result: storeUserSession 
     });
     const options = ['View Balance', 'Transfer Funds', 'View Transactions', 'Launch Capsule'];
-    await sendMessage(telegramId, "Thank you for activiating me! 🚀 what would you like to do Today ?", );
+    await sendMessage(telegramId,  `Activated! what would you like to do: \n\nCommands:\n` +
+      "/balance - Check your wallet balance\n" +
+      "/address - Get your wallet address\n" +
+      "/history - View your recent transaction history\n" +
+      "/transfer <toAddress> <amount> - Transfer funds\n" +
+      "/info - View bot details", );
   } catch (error: any) {
     console.error("Error storing session:", error);
     res.status(500).json({ 

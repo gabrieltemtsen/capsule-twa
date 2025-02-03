@@ -82,3 +82,14 @@ export async function deleteUserShare(telegramId: string): Promise<void> {
     throw error;
   }
 }
+
+export async function getUserSession(telegramId: any): Promise<any>{
+  try {
+    const res = await redis.get(`capsule:user:${telegramId}`);
+    console.log(`Retrieved userShare for Telegram ID ${telegramId}:`, res);
+    return res;
+  } catch (error) {
+    console.error(`Error retrieving userShare for Telegram ID ${telegramId}:`, error);
+    return null;
+  }
+}

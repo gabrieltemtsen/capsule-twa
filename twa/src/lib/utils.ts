@@ -2,6 +2,7 @@ import axios from "axios"
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import capsuleClient from "./capsuleClient"
+import { getUserSession } from "./kv"
 
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL
@@ -76,5 +77,18 @@ export const TEST_SERVER_HELLO = async() => {
   } catch (error: any) {     
     console.error("Error:", error.message);
     alert(`Error: ${error.message}`);
+  }
+}
+
+export const IsServerSessionActive = async(telegramId : any) => {
+  try {
+
+    const session = await getUserSession(telegramId);
+    console.log("Session:", session);
+    //
+
+    
+  } catch (error: any) {
+    
   }
 }

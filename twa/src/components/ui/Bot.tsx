@@ -1,49 +1,69 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent } from "./card";
 import { Button } from "./button";
 import { SEND_SESSION_TO_SERVER } from "../../lib/utils";
+import capsuleClient from "../../lib/capsuleClient";
 
 interface BotCardProps {
   username: string;
   telegramId: number;
-  serializedSession: any
+  serializedSession: any;
 }
 
-export const BotCard: React.FC<BotCardProps> = ({
-  username,
-  telegramId,
-  serializedSession
-}) => {
+export const BotCard: React.FC<BotCardProps> = ({ username, telegramId, serializedSession }) => {
+  const [isSessionActive, setIsSessionActive] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const checkSession = async () => {
+      setLoading(true);
+      try {
+        const sessionActive = await capsuleClient.isSessionActive();
+        setIsSessionActive(sessionActive);
+      } catch (error) {
+        console.error("Error checking session status:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkSession();
+  }, []);
+
   return (
-    <Card className="bg-background border-border">
-      <CardContent className="pt-6 p-7">
-        <div className="flex items-center gap-3 mb-6">
-          <div>
-            <h2 className="font-medium text-lg text-foreground">
-              Capsule with gabe Bot and {username}
-            </h2>
+    <Card className="bg-background border-border shadow-md rounded-xl overflow-hidden">
+      <CardContent className="p-6">
+        <div className="flex flex-col items-start gap-4">
+          <h2 className="font-bold text-xl text-foreground">
+            Capsule Bot Integration for {username}
+          </h2>
 
-            <Button
-            onClick={()=> {SEND_SESSION_TO_SERVER(telegramId.toString(), serializedSession);} }
-            >
+          {loading ? (
+            <p className="text-sm text-muted-foreground">Checking bot session...</p>
+          ) : isSessionActive ? (
+            <div className="text-green-600 text-sm">
+              ✅ Your bot session is active and ready for operations.
+            </div>
+          ) : (
+            <>
+              <Button
+                onClick={() => SEND_SESSION_TO_SERVER(telegramId.toString(), serializedSession)}
+                className="bg-primary text-white px-4 py-2 rounded-lg"
+              >
                 Activate Bot Operations
-            </Button>
+              </Button>
+              <p className="text-sm text-muted-foreground">
+                Activate the bot to enable operations like portfolio balance checks and transactions.
+              </p>
+            </>
+          )}
 
-           <div className="text-sm text-muted-foreground">
-           <li>Ask Bot to make transactions</li>
-           <li>Ask Bot for Portfolio Balance</li>
-           </div>
-
-            {/* <Button
-            onClick={()=> {TEST_SERVER_HELLO();} }
-            >
-                TEST SERVER
-            </Button>
-            */}
-          </div>
+          <ul className="text-sm text-muted-foreground mt-3 space-y-1 list-disc pl-5">
+            <li>Ask the bot to make transactions</li>
+            <li>Ask the bot for your portfolio balance</li>
+            <li>Receive alerts for wallet updates</li>
+          </ul>
         </div>
-
-      
       </CardContent>
     </Card>
   );
