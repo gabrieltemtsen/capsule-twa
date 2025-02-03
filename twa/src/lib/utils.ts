@@ -83,9 +83,20 @@ export const TEST_SERVER_HELLO = async() => {
 export const IsServerSessionActive = async(telegramId : any) => {
   try {
 
-    const session = await getUserSession(telegramId);
-    console.log("Session:", session);
-    //
+    const res = await fetch(`${SERVER_URL}/api/sessionStatus?telegramId=${telegramId}`, {
+      method: 'GET',
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+
+    const data = await res.json();
+    return data.status;
+   
 
     
   } catch (error: any) {

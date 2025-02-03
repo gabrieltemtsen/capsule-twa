@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardContent } from "./card";
 import { Button } from "./button";
-import { SEND_SESSION_TO_SERVER } from "../../lib/utils";
+import { IsServerSessionActive, SEND_SESSION_TO_SERVER } from "../../lib/utils";
 import capsuleClient from "../../lib/capsuleClient";
 
 interface BotCardProps {
@@ -18,8 +18,8 @@ export const BotCard: React.FC<BotCardProps> = ({ username, telegramId, serializ
     const checkSession = async () => {
       setLoading(true);
       try {
-        const sessionActive = await capsuleClient.isSessionActive();
-        setIsSessionActive(sessionActive);
+        const status = await IsServerSessionActive(telegramId)
+        setIsSessionActive(status);
       } catch (error) {
         console.error("Error checking session status:", error);
       } finally {

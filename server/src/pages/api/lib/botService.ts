@@ -47,6 +47,7 @@ const initializeBot = () => {
     }
 
     try {
+      console.log('Message received:', message.text);
       // Check user session in Redis
       const userSession: any = await redis.get(`capsule:user:${telegramId}`);
       if (!userSession) {
@@ -57,6 +58,7 @@ const initializeBot = () => {
       await capsule.importSession(userSession);
       const isSessionActive = await capsule.keepSessionAlive();
       if (!isSessionActive) {
+        await capsule.refreshSession(true);
         return sendActivationLink(chatId, "Your session has expired. Please reactivate the bot:");
       }
 
@@ -264,7 +266,7 @@ const initializeBot = () => {
     return bot.sendMessage(chatId, message, {
       reply_markup: {
         inline_keyboard: [
-          [{ text: "Activate Bot", web_app: { url: `${process.env.NEXT_PUBLIC_CLIENT_URL}` } }],
+          [{ text: "Activate Bot", web_app: { url: `${process.env.ç}` } }],
         ],
       },
     });
