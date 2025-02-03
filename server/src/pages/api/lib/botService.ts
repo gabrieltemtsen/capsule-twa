@@ -187,16 +187,25 @@ const initializeBot = () => {
       // Convert amount to Wei
       const amountInWei = ethers.parseUnits(amount, "ether");
   
+      // Get the current gas fee data
+      const feeData = await provider.getFeeData();
+  
+      // Ensure we have non-zero fee values
+      const maxPriorityFeePerGas = feeData.maxPriorityFeePerGas || ethers.parseUnits("1.5", "gwei");  // Default to 1.5 gwei if missing
+      const maxFeePerGas = feeData.maxFeePerGas || maxPriorityFeePerGas * BigInt(2);  // Double priority fee as fallback
+  
       // Get the current chain ID from the provider
       const { chainId } = await provider.getNetwork();
   
-      // Create and sign the transaction with the correct chain ID
+      // Create and sign the transaction
       const transaction = {
         from: senderAddress,
         to: toAddress,
         value: amountInWei,
         gasLimit: ethers.toBigInt(21000),
-        chainId,  // Ensure the correct chain ID is set for Sepolia
+        chainId,
+        maxFeePerGas,
+        maxPriorityFeePerGas,
       };
   
       const signedTransaction = await signer.signTransaction(transaction);
@@ -220,6 +229,7 @@ const initializeBot = () => {
       return bot.sendMessage(chatId, "An error occurred while processing your transfer. Please try again later.");
     }
   }
+  
   
   
 
