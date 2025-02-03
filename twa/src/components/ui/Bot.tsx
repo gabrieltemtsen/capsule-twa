@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Card, CardContent } from "./card";
 import { Button } from "./button";
 import { IsServerSessionActive, SEND_SESSION_TO_SERVER } from "../../lib/utils";
-import capsuleClient from "../../lib/capsuleClient";
 
 interface BotCardProps {
   username: string;

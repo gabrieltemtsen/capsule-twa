@@ -2,7 +2,6 @@ import axios from "axios"
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import capsuleClient from "./capsuleClient"
-import { getUserSession } from "./kv"
 
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL
