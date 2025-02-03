@@ -213,7 +213,10 @@ const initializeBot = () => {
       // Get the current chain ID from the provider
       const { chainId } = await provider.getNetwork();
   
-      // Create and sign the transaction
+      // Get the latest nonce for the sender's address
+      const nonce = await provider.getTransactionCount(senderAddress, "latest");
+  
+      // Create and sign the transaction with the correct nonce
       const transaction = {
         from: senderAddress,
         to: toAddress,
@@ -222,6 +225,7 @@ const initializeBot = () => {
         chainId,
         maxFeePerGas,
         maxPriorityFeePerGas,
+        nonce,  // Use the latest nonce
       };
   
       const signedTransaction = await signer.signTransaction(transaction);
@@ -245,6 +249,7 @@ const initializeBot = () => {
       return bot.sendMessage(chatId, "An error occurred while processing your transfer. Please try again later.");
     }
   }
+  
   
   
   

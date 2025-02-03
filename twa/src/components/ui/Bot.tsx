@@ -49,7 +49,7 @@ export const BotCard: React.FC<BotCardProps> = ({ username, telegramId, serializ
       <CardContent className="p-6">
         <div className="flex flex-col items-start gap-4">
           <h2 className="font-bold text-xl text-foreground">
-            Capsule Bot Integration for {username}
+            Capsule Telegram Bot Assistant for {username}
           </h2>
 
           {loading ? (
