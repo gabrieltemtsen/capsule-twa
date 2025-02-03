@@ -65,4 +65,7 @@ This is the **server-side bot handler** that connects with Telegram to manage wa
    - If a session is inactive or expired, the bot prompts the user to re-activate through the mini app.
 
 ---
+### Live demo 
+
+- [Gabe-Bot](http://t.me/twa_gabe_capsule_bot)
 
