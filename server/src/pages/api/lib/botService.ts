@@ -129,35 +129,39 @@ const initializeBot = () => {
       const provider = new ethers.JsonRpcProvider("https://ethereum-sepolia-rpc.publicnode.com");
       const signer = new CapsuleEthersSigner(capsule, provider);
       const address = await signer.getAddress();
-
-      const blockStep = 10000;  // Fetch 10,000 blocks at a time
+  
+      // Define the maximum number of blocks to search (e.g., last 1,000 blocks)
+      const maxBlocks = 1000;
       const latestBlock = await provider.getBlockNumber();
-      let fromBlock = 0;
-      const logs: ethers.Log[] = [];
-
-      while (fromBlock <= latestBlock) {
-        const toBlock = Math.min(fromBlock + blockStep, latestBlock);
-        const logsChunk = await provider.getLogs({
-          address,
-          fromBlock: ethers.toQuantity(fromBlock),
-          toBlock: ethers.toQuantity(toBlock),
-        });
-
-        logs.push(...logsChunk);
-        fromBlock = toBlock + 1;
-      }
-
+      // Ensure fromBlock doesn't go below 0
+      const fromBlock = Math.max(latestBlock - maxBlocks, 0);
+  
+      // Fetch logs only within the last 1,000 blocks
+      const logs: ethers.Log[] = await provider.getLogs({
+        address,
+        fromBlock: ethers.toQuantity(fromBlock),
+        toBlock: ethers.toQuantity(latestBlock),
+      });
+  
       if (logs.length === 0) {
         return bot.sendMessage(chatId, "No recent transactions found.");
       }
-
-      const formattedHistory = logs.slice(0, 5).map((tx, index) => `#${index + 1}: TxHash ${tx.transactionHash}`).join("\n");
+  
+      // Optionally sort the logs so that the most recent transactions come first.
+      logs.sort((a, b) => (b.blockNumber || 0) - (a.blockNumber || 0));
+  
+      // Format and show up to 5 recent transactions
+      const formattedHistory = logs.slice(0, 5)
+        .map((tx, index) => `#${index + 1}: TxHash ${tx.transactionHash}`)
+        .join("\n");
+  
       return bot.sendMessage(chatId, `Here are your recent transactions:\n\n${formattedHistory}`);
     } catch (error) {
       console.error("Error fetching transaction history:", error);
       return bot.sendMessage(chatId, "An error occurred while fetching your transaction history.");
     }
   }
+  
 
   async function handleTransferCommand(chatId: number, text: string) {
     try {
